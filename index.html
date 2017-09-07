@@ -1,81 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <title>Favorite Movies</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/javascript/jquery-3.2.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 </head>
 
 <body>
+
   <div class="container">
-    <h1>Movie Search</h1>
+    <div class="jumbotron row">
+      <div class="col-md-6">
+      <h1 class="display-3">Movie Search</h1>
+        <p class="lead">Search for a movie to find reviews, trailers and more!</p>
+        </div><!--end of col-md-6-->
+        <div class="col-md-6">
+        <form id="movie-form">
+        <label for="movie-input">Search for a movie</label>
+        <input type="text" id="movie-input"><br><br>
+        <!-- This button will trigger our AJAX call -->
+        <input class="btn btn-success" id="find-movie" type="submit" value="Movie Search">
+        <input class="btn btn-danger" id="clear-movie" type="submit" value="Search Clear">
+      </form>
+      </div>
+        <hr class="my-4">
 
-    <!-- We'll be dumping our JSON contents in here -->
 
-    <!-- This form will be where users input data about the movies -->
-    <form id="movie-form">
-      <label for="movie-input">Search for a movie</label>
-      <input type="text" id="movie-input"><br>
 
-      <!-- This button will trigger our AJAX call -->
-      <input id="find-movie" type="submit" value="Movie Search">
-    </form>
+      </div><!--end of jumbotron row-->
     <br>
+    
+    <div id="movie-view"></div>
+    <br>
+    <div id="player"></div>
+    
+    <div class="panel panel-primary">
+      <div class="panel-heading"><strong>Movie Posters</strong></div>
 
-<input id="clear-movie" type="submit" value="Search Clear">
+      <div class="panel-body">
+
+        <table class="table table-hover" id="addMovie">
+          <thead>
+            <tr>
+              <th >Title</th>
+              <th >Year</th>
+              <th> Poster</th>
+            </tr>
+          </thead>
+          <!--I gave the table bodies theyre own unique id's to reference in the search clear on-click event -->
+          <tbody id="movie-results"></tbody>
+        </table>
+
+      </div><!--end of panel-body-->
+
+    </div><!--end of panel-primary-->
 
 
-<div id="movie-view"></div>
+    <div class="panel panel-primary">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
-      // This .on("click") function will trigger the AJAX Call
-      $("#find-movie").on("click", function(event) {
+      <div class="panel-heading"><strong>Trailers from YouTube</strong></div>
 
-        // Preventing the submit button from trying to submit the form
-        // We're optionally using a form so the user may hit Enter to search instead of clicking the button
-        event.preventDefault();
 
-        // Here we grab the text from the input box
-        var movie = $("#movie-input").val();
 
-        // Here we construct our URL
-        var queryURL = "http://www.omdbapi.com/?s=" + movie + "&apikey=40e9cece";
+      <div class="panel-body" id="youtube-results">
+       <!--  <table class="table table-hover" id="addMovieUrl">
+          <thead>
+            <tr>
+              <th >Thumbnail</th>
+              <th> Movie Clip Url</th>
+            </tr>
+          </thead>
+          <tbody id="youtube-results"></tbody>
+        </table> -->
+      </div><!--end of panel-body-->
 
-        // Write code between the dashes below to hit the queryURL with $ajax, then take the response data
-        // and display it in the div with an id of movie-view
 
-        // YOUR CODE GOES IN THESE DASHES. DO NOT MANUALLY EDIT THE HTML ABOVE
 
-        // =================================================================
+    </div><!---end of panel-primary-->
 
-          $.ajax({
-          url: queryURL,
-          method: "GET"
-        }).done(function(response) {
+    <div class="panel panel-primary">
 
-          $.each(response.Search, function() {
-          $('#movie-view').append(
-            "<h3>" + this.Title + "</h3>"
-            + "<h2></h2>"
-            + "<h4>" + this.Year + "</h4>"
-            +"<p></p>"
-            +"<img src=" + this.Poster + "></img>" 
-    );
-});
-          //  for (i = 0; i < response.array; i++) {         
-          //   $("#movie-view").text(response[i]);
-          // };
-        
-        });
-        // =================================================================
-      });
- $("#clear-movie").on("click", function(event) {
-    $("#movie-view").empty();
-  });
-    </script>
-  </div>
+      <div class="panel-heading"><strong>NYT Movie Review</strong></div>
+      <div class="panel-body">
+        <table class="table table-hover" id="addURL">
+          <thead>
+            <tr>
+              <th >Link Text</th>
+              <th >Movies Review Urls</th>
+            </tr>
+          </thead>
+          <!-- heres the other id -->
+          <tbody id="url-results">
+          </tbody>
+        </table>
+      </div><!--end of panel-body-->
+
+    </div><!--end of panel-primary-->
+
+  </div><!--end of container-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script src="https://apis.google.com/js/client.js" type="text/javascript"></script>
+  <script src="https://www.youtube.com/iframe_api" type="text/javascript"></script>
+  <script type="text/javascript" src="assets/javascript/movieApp.js"></script>
 </body>
-
 </html>
