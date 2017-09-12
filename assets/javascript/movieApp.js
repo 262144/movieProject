@@ -17,7 +17,6 @@ function getNewMovies(movie) {
         for (var i = 0; i < 4; i++) {
             var movieInfoDiv = $("<div>");
             movieInfoDiv.addClass("movie-info");
-            // movieInfoDiv.addClass("clearfix")
             movieInfoDiv.addClass("pull-left")
 
             var pTitle = $("<p>");
@@ -44,9 +43,6 @@ function getNewMovies(movie) {
             movieInfoDiv.append(makeButton(movieTitle, movieId));
             movieInfoDiv.append(movieImg);
             movieInfoDiv.append(pPlot)
-            // makeButton(response.results[i].title, response.results[i].id);
-
-
             $('#posters').append(movieInfoDiv);
 
         }
@@ -65,7 +61,6 @@ function makeButton(title, id) {
     newButton.attr("data-name", id);
     newButton.attr("title", title);
     newButton.text("click me");
-    // $("#posters").append(newButton);
     return newButton;
 
 }
