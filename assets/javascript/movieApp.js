@@ -178,18 +178,6 @@ function displayVideo(result, i) {
 }
 
 
-// Movie App
-// hideDivs();
-
-// $("#find-movie").on("click", function(event) {
-//  event.preventDefault();
-//  clearResults();
-//  hideDivs();
-//     var movie = $("#movie-input").val().trim();
-//     getNewMovies(movie);
-//     $("#poster-panel").show();
-// });
-
 //updated form submit
 $("#movie-form").submit(function(event) {
     input = $("#movie-input").val().trim();
@@ -220,7 +208,6 @@ $("#movie-form").submit(function(event) {
     } else {
         // console.log("do nothing");
     }
-// $('.ui-menu').hide();
 
 });
 
@@ -229,13 +216,6 @@ $(document).on("click", ".move-button", displayGoodies);
 
 // validate
 $("#movie-form").validate();
-
-// $("#movie-form").validate({
-//   submitHandler: function(form) {
-//     // do other things for a valid form
-//     form.submit();
-//   }
-// });
 
 //Autocomplete
 
@@ -281,8 +261,6 @@ $(function() {
 });
 
 //momentjs to get year of relesae
-
-// 1990-09-12
 
 function getYear(date){
  var dateFormat = "YYYY-MM-DD";
