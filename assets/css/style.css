@@ -1,13 +1,12 @@
-/*#movie-input{
-	width: 80%!important;
-    height: 85px!important;
-    font-size: xx-large;
-}*/
-.jumbotron{
-	    margin: 50px 15px;
+.jumbotron {
+    margin: 50px 0 50px 0;
 }
-body{
-	background: #50545a;
+
+body {
+    background: #50545a;
+    background-image: url(../images/backround.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
     /*color: #fff;*/
     font-weight: 400;
     font-size: 1em;
@@ -18,20 +17,60 @@ body{
 }
 
 .ui-autocomplete {
-    background: #4a4a4a!important;
+    /*background: #4a4a4a!important;*/
     border-radius: 0px;
+    font-family: 'Raleway', Arial, sans-serif!important;
 }
-.error{
+
+.error {
     color: red;
     font-size: large;
 }
-/*.input-group.input-group-unstyled input.form-control {
-    -webkit-border-radius: 4px;
-       -moz-border-radius: 4px;
-            border-radius: 4px;
+
+
 }
-.input-group-unstyled .input-group-addon {
-    border-radius: 4px;
-    border: 0px;
-    background-color: transparent;
+.stylish-input-group .input-group-addon {
+    background: white !important;
+}
+.stylish-input-group .form-control {
+    border-right: 0;
+    box-shadow: 0 0 0;
+    border-color: #ccc;
+}
+.stylish-input-group button {
+    border: 0;
+    background: transparent;
+}
+.poster {
+    margin: 10px!important;
+    border-style: solid!important;
+    float: left!important;
+    /*height: 200px;*/
+
+    width: 220px;
+}
+
+/*.float-left {
+    margin: 10px;
+    text-align: center;
+
+    float: left!important;
 }*/
+.movie-info {
+    max-width: 300px;
+
+}
+.form-group,
+{
+    text-align: center;
+}
+
+.clear{
+	clear: both!important;
+	margin: 2px!important;
+	max-width: 290px!important;
+}
+.btn-primary {
+	    margin: 0 0 0 75px;
+
+}

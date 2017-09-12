@@ -1,36 +1,106 @@
-//global var
-
 movieSearch = null;
-$("#movie-poster").hide();
-$("#movie-review").hide();
-$("#movie-trailer").hide();
 
-
+hideDivs();
 // Functions
-function getOmdbData(title) {
-    // var queryURL = "http://www.omdbapi.com/?s=" + title + "&apikey=40e9cece";
-    var queryURL = "https://api.themoviedb.org/3/search/movie?" + "&query=" + title + "&api_key=d53b802d30d38d0bf73c24dabc4a5c8d";
+function getNewMovies(movie) {
+    var queryURL = "https://api.themoviedb.org/3/search/movie?api_key=d53b802d30d38d0bf73c24dabc4a5c8d&language=en-US&query=" + movie;
     $.ajax({
         url: queryURL,
         method: "GET"
     }).done(function(response) {
-        // console.log(response.Search); old call
-        console.log(response.results);
-        console.log(response);
-        // for (var i = 0; i < response.Search.length; i++) {
-        //     $("#addMovie > tbody").append("<tr><td>" + response.Search[i].Title + "</td><td>" + response.Search[i].Year + "</td><td>" + "<img src=" + response.Search[i].Poster + "></img>" + "</td></tr>");
+        // for (var i = 0; i < 8; i++) {
+        //     var movieId = response.results[i].id;
+        //     $("#posters").append("<div><p>" + response.results[i].title + "</p><p>" + response.results[i].release_date + "</p><p><img src= https://image.tmdb.org/t/p/w185/" + response.results[i].poster_path + "></p><p>" + response.results[i].overview + "</p></div>");
+        //     makeButton(response.results[i].title, response.results[i].id);
         // }
 
-        for (var i = 0; i < response.results.length; i++) {
-            $("#addMovie > tbody").append("<tr><td>" +
-                response.results[i].title + "</td><td>" +
-                response.results[i].release_date + "</td><td>" + "<img class='poster-click' src= https://image.tmdb.org/t/p/w185/" +
-                response.results[i].poster_path + "></img>" + "</td></tr>");
+        for (var i = 0; i < 4; i++) {
+            var movieInfoDiv = $("<div>");
+            movieInfoDiv.addClass("movie-info");
+            // movieInfoDiv.addClass("clearfix")
+            movieInfoDiv.addClass("pull-left")
+
+            var pTitle = $("<p>");
+            var pReleased = $("<p>");
+            var pPlot = $("<p>");
+            pPlot.addClass("clear");
+            var movieTitle = response.results[i].title;
+            var movieRelDate = getYear(response.results[i].release_date);
+            var movieId = response.results[i].id;
+            var moviePoster = response.results[i].poster_path;
+            var moviePlot = response.results[i].overview;
+
+            pTitle.text("Title: " + movieTitle);
+            pReleased.text("Released: " + movieRelDate);
+            pPlot.text("Plot: " + moviePlot);
+
+            var movieImg = $("<img>");
+            movieImg.attr("src", "https://image.tmdb.org/t/p/w185/" + moviePoster);
+            movieImg.addClass("img-responsive")
+            movieImg.addClass("poster");
+
+            movieInfoDiv.append(pTitle);
+            movieInfoDiv.append(pReleased);
+            movieInfoDiv.append(makeButton(movieTitle, movieId));
+            movieInfoDiv.append(movieImg);
+            movieInfoDiv.append(pPlot)
+            // makeButton(response.results[i].title, response.results[i].id);
+
+
+            $('#posters').append(movieInfoDiv);
+
         }
-    })
-} // end of getOmbData
+
+    });
+    queryURL = "";
+    movie = "";
+};
 
 
+function makeButton(title, id) {
+    var newButton = $("<button>");
+    newButton.addClass("btn btn-primary move-button");
+    //
+    newButton.addClass("float-left");
+    newButton.attr("data-name", id);
+    newButton.attr("title", title);
+    newButton.text("click me");
+    // $("#posters").append(newButton);
+    return newButton;
+
+}
+
+
+function displayGoodies() {
+    clearGoodies();
+    $("#review-panel").show();
+    $("#trailer-panel").show();
+    var title = $(this).attr("title");
+    var dataName = $(this).attr("data-name");
+    getTrailerId(dataName);
+
+    getNytData(title);
+
+    //scroll to top of trailer div
+    $('html, body').animate({
+        scrollTop: ($('#trailer-panel').offset().top)
+    }, 500);
+
+}
+
+
+function getTrailerId(x) {
+    var queryURL = "https://api.themoviedb.org/3/movie/" + x + "/videos?api_key=d53b802d30d38d0bf73c24dabc4a5c8d&language=en-US"
+    console.log(queryURL);
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).done(function(response) {
+        var youtubeId = response.results[0].key;
+        console.log(youtubeId);
+        getYtData(youtubeId);
+    });
+}
 
 
 function getNytData(title) {
@@ -40,7 +110,7 @@ function getNytData(title) {
         method: 'GET',
     }).done(function(result) {
         for (var i = 0; i < result.results.length; i++) {
-            $("#addURL > tbody").append("<tr><td>" + result.results[i].link.suggested_link_text + "</td><td>" + "<a href='" + result.results[i].link.url + "'>" + result.results[i].link.url + "</a>" + "</td></tr>");
+            $("#reviews > tbody").append("<tr><td>" + result.results[i].link.suggested_link_text + "</td><td>" + "<a href='" + result.results[i].link.url + "'>" + result.results[i].link.url + "</a>" + "</td></tr>");
         }
     })
 }
@@ -50,12 +120,9 @@ function getYtData(title) {
     var youTubeUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + title + " Trailer" + "&key=AIzaSyBFSTdHGhgwD7sUXEQ0UlXSKkro4SP3EnA";
     $.ajax({
         url: youTubeUrl,
-        method: 'GET',
-        maxResults: '2'
+        method: 'GET'
     }).done(function(response) {
-        // console.log(response);
         var results = response.items;
-        // console.log("results = " + results);
         for (var i = 0; i < results.length; i++) {
             displayVideo(results[i], i);
         }
@@ -64,21 +131,31 @@ function getYtData(title) {
 
 
 function clearResults() {
-    $("#movie-results").empty();
-    $("#youtube-results").empty();
-    $("#url-results").empty();
-    //rehide divs
-    $("#movie-poster").hide();
-    $("#movie-review").hide();
-    $("#movie-trailer").hide();
-
+    $("#posters").empty();
+    $("#trailers").empty();
+    $("#reviews-results").empty();
+    $("#movie-input").empty();
 }
+
+
+function clearGoodies() {
+    $("#trailers").empty();
+    $("#reviews-results").empty();
+}
+
+
+function hideDivs() {
+    $("#poster-panel").hide();
+    $("#review-panel").hide();
+    $("#trailer-panel").hide();
+}
+
 
 function displayVideo(result, i) {
     var vid = document.createElement('div');
     vidId = 'vid' + i;
     vid.id = vidId;
-    $("#youtube-results").append(vid);
+    $("#trailers").append(vid);
     var player = new YT.Player(vidId, {
         height: '360',
         width: '480',
@@ -92,89 +169,83 @@ function displayVideo(result, i) {
         var myId = e.target.a.id;
         var duration = e.target.getDuration();
         if (duration === 0) {
-            // console.log('Video ' + myId + ' cannot be played, so it was deleted.');
-            $("#youtube-results").empty(e.target.a);
+            $("#trailers").empty(e.target.a);
         } else {
             var myId = e.target.a.id;
-            // console.log('Video ' + myId + ' ready to play.');
+            console.log('Video ' + myId + ' ready to play.');
         }
     }
 }
 
 
-
 // Movie App
+// hideDivs();
 
+// $("#find-movie").on("click", function(event) {
+//  event.preventDefault();
+//  clearResults();
+//  hideDivs();
+//     var movie = $("#movie-input").val().trim();
+//     getNewMovies(movie);
+//     $("#poster-panel").show();
+// });
+
+//updated form submit
 $("#movie-form").submit(function(event) {
-    // $("#find-movie").submit(function(event) {
-    // var movie = $("#movie-input").val().trim();
-
     input = $("#movie-input").val().trim();
     // not using autocomplete result
     if (input != '' && movieSearch == null) {
         event.preventDefault();
         clearResults();
         var movie = $("#movie-input").val().trim();
-        console.log(movie + " this is the 'movie' var");
-        console.log(movie);
-        getOmdbData(movie);
+        getNewMovies(movie);
         getNytData(movie);
         getYtData(movie);
         $('.ui-menu').hide(); // hide autocomplete options
-
-        $("#movie-poster").show();
+        scrollPoster();
+        $("#poster-panel").show();
         movieSearch = null;
         // if were are using the autcomplete recommendation
     } else if (movieSearch != null) {
         event.preventDefault();
         clearResults();
         var movie = window.movieSearch;
-        console.log(movie + " else if");
-        getOmdbData(movie);
+        getNewMovies(movie);
         getNytData(movie);
         getYtData(movie);
-
-        $("#movie-poster").show();
+        $("#poster-panel").show();
+        scrollPoster();
         movieSearch = null; // reset var
 
     } else {
-        console.log("do nothing");
+        // console.log("do nothing");
     }
-
-    //show divs
-
-    // $("#movie-poster").show();
-    // resetSearch();
-
+// $('.ui-menu').hide();
 
 });
 
+$(document).on("click", ".move-button", displayGoodies);
 
 
-$("#clear-movie").click("click", function(event) {
-    event.preventDefault();
-    clearResults();
-    resetSearch();
-    movieSearch = null;
-    //clear input box
-    $("input[type=text], textarea").val("");
-});
+// validate
+$("#movie-form").validate();
 
-// UI onload Hide  divs
+// $("#movie-form").validate({
+//   submitHandler: function(form) {
+//     // do other things for a valid form
+//     form.submit();
+//   }
+// });
 
-
-
-//parsly
+//Autocomplete
 
 $(function() {
     var getAjax = function(request, response) {
-        // var objects = {};
         var getTitle = "https://api.themoviedb.org/3/search/movie?" + "&query=" + request.term + "&api_key=d53b802d30d38d0bf73c24dabc4a5c8d";
         $.ajax({
             url: getTitle,
             method: 'GET',
         }).done(function(data) {
-
             // use map to format as JQuery autocomplete expects
             response($.map(data.results, function(item) {
                 return {
@@ -185,61 +256,44 @@ $(function() {
         })
 
     }
-
     var selectItem = function(event, ui) {
-        event.preventDefault() //
+        event.preventDefault() 
         $("#movie-input").val(ui.item.value);
         console.log(ui.item.value);
         window.movieSearch = ui.item.value;
-        console.log(window.movieSearch);
-        // getOmdbData(window.movieSearch);
         return false;
     }
 
     $("#movie-input").autocomplete({
         source: getAjax,
-        // source: ['goodfellas','test2','test3'],
         // select: selectItem,
         select: function(event, ui) {
             $("#movie-input").val(ui.item.value);
             movieSearch = ui.item.value;
-            // console.log(movieSearch);
             $("#movie-form").submit(); // submit form on selection - mouse or enter key
 
         },
-        minLength: 2,
+        minLength: 2, 
         change: function() {
             $("#movie-input").val("").css("display", 2);
-
-            // movieSearch = this.select;
-            // console.log(this.select);
-            // getOmdbData(selectItem);
         }
     });
 });
 
+//momentjs to get year of relesae
 
-function resetSearch() {
-    movieSearch = '';
+// 1990-09-12
 
+function getYear(date){
+ var dateFormat = "YYYY-MM-DD";
+ var convertedDate = moment(date, dateFormat);
+ year = convertedDate.format("YYYY");
+ return year;
 }
 
-
-function getSearchTerm() {
-
-    // determin to use autocomplet or not
-
-
-
-
+function scrollPoster(){
+       $('html, body').animate({
+        scrollTop: ($('#poster-panel').offset().top)
+    }, 500);
 }
 
-$("#movie-form").validate();
-
-//
-
-// document.getElementById("#movie-input").addEventListener('keypress', function(event) {
-//         if (event.keyCode == 13) {
-//             event.preventDefault();
-//         }
-//     });
