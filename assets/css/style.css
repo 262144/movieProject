@@ -1,1 +1,37 @@
+/*#movie-input{
+	width: 80%!important;
+    height: 85px!important;
+    font-size: xx-large;
+}*/
+.jumbotron{
+	    margin: 50px 15px;
+}
+body{
+	background: #50545a;
+    /*color: #fff;*/
+    font-weight: 400;
+    font-size: 1em;
+    font-family: 'Raleway', Arial, sans-serif;
+    overflow: hidden;
+    overflow-y: scroll;
+    min-height: 590px;
+}
 
+.ui-autocomplete {
+    background: #4a4a4a!important;
+    border-radius: 0px;
+}
+.error{
+    color: red;
+    font-size: large;
+}
+/*.input-group.input-group-unstyled input.form-control {
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+.input-group-unstyled .input-group-addon {
+    border-radius: 4px;
+    border: 0px;
+    background-color: transparent;
+}*/
