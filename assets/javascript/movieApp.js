@@ -86,13 +86,15 @@ function displayGoodies() {
 
 function getTrailerId(x) {
     var queryURL = "https://api.themoviedb.org/3/movie/" + x + "/videos?api_key=d53b802d30d38d0bf73c24dabc4a5c8d&language=en-US"
-    console.log(queryURL);
+    // console.log(queryURL);
     $.ajax({
         url: queryURL,
         method: "GET"
     }).done(function(response) {
         var youtubeId = response.results[0].key;
-        console.log(youtubeId);
+        var test = response.results[0].type;
+        // console.log(youtubeId);
+        console.log(test);
         getYtData(youtubeId);
     });
 }
@@ -167,7 +169,7 @@ function displayVideo(result, i) {
             $("#trailers").empty(e.target.a);
         } else {
             var myId = e.target.a.id;
-            console.log('Video ' + myId + ' ready to play.');
+            // console.log('Video ' + myId + ' ready to play.');
         }
     }
 }
@@ -234,7 +236,7 @@ $(function() {
     var selectItem = function(event, ui) {
         event.preventDefault() 
         $("#movie-input").val(ui.item.value);
-        console.log(ui.item.value);
+        // console.log(ui.item.value);
         window.movieSearch = ui.item.value;
         return false;
     }
@@ -248,6 +250,7 @@ $(function() {
             $("#movie-form").submit(); // submit form on selection - mouse or enter key
 
         },
+        autoFocus: true,
         minLength: 2, 
         change: function() {
             $("#movie-input").val("").css("display", 2);
