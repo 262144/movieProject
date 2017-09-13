@@ -1,5 +1,6 @@
 .jumbotron {
     margin: 50px 0 50px 0;
+    border-color: grey!important;
 }
 
 body {
@@ -9,7 +10,7 @@ body {
     background-size: cover;
     /*color: #fff;*/
     font-weight: 400;
-    font-size: 1em;
+    font-size: 1.25em;
     font-family: 'Raleway', Arial, sans-serif;
     overflow: hidden;
     overflow-y: scroll;
@@ -28,6 +29,7 @@ body {
 }
 
 
+
 }
 .stylish-input-group .input-group-addon {
     background: white !important;
@@ -42,13 +44,15 @@ body {
     background: transparent;
 }
 .poster {
-    margin: 10px!important;
+    /*margin: 10px!important;*/
+    margin: 10px 0 10px 0!important;
     border-style: solid!important;
-    float: left!important;
+    /*float: left!important;*/
     /*height: 200px;*/
 
     width: 220px;
 }
+
 
 /*.float-left {
     margin: 10px;
@@ -56,21 +60,66 @@ body {
 
     float: left!important;
 }*/
-.movie-info {
+/*.movie-info {
     max-width: 300px;
-
+}*/
+.input-group{
+    width: 450px!important;
+    margin: 0 auto;
+}
+.lead{
+    text-align: center;
 }
 .form-group,
 {
     text-align: center;
 }
 
-.clear{
-	clear: both!important;
-	margin: 2px!important;
-	max-width: 290px!important;
+.clear {
+    clear: both!important;
+    margin: 2px!important;
+    /*max-width: 290px!important;*/
 }
 .btn-primary {
-	    margin: 0 0 0 75px;
+    margin: 0 0 0 75px;
+}
+
+
+/*.main-videos{
+    max-height: 300px!important;
+}*/
+.movie-released,
+.movie-title {
+    font-size: 2em!important;
+    /*text-align: center;*/
+}
+.movie-plot {
+    font-size: 1.5em!important;
+}
+
+.panel-body {
+    background-color: #eee!important;
+}
+
+.panel-heading {
+    color: #fff!important;
+    background-color: #2c2c2c!important;
+    text-align: center!important;
+    font-size: 1.5em!important;
+
+    
+}
+
+.panel-primary{
+        border-color: grey!important;
+}
+
+.head-h1{
+    text-align: center!important;
+    margin-bottom: 50px!important;
+
+}
+
+.notification{
 
 }
