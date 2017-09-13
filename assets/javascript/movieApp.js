@@ -121,7 +121,9 @@ function getYtData(title) {
     }).done(function(response) {
         var results = response.items;
         for (var i = 0; i < results.length; i++) {
-            displayVideo(results[i], i);
+            // displayVideo(results[i], i);
+            //blake mods
+             displayVideo(results[0]);
         }
     });
 }
@@ -146,6 +148,11 @@ function hideDivs() {
     $("#review-panel").hide();
     $("#trailer-panel").hide();
 }
+function resetDivs() {
+    // $("#poster-panel").hide();
+    $("#review-panel").hide();
+    $("#trailer-panel").hide();
+}
 
 
 function displayVideo(result, i) {
@@ -154,8 +161,11 @@ function displayVideo(result, i) {
     vid.id = vidId;
     $("#trailers").append(vid);
     var player = new YT.Player(vidId, {
-        height: '360',
-        width: '480',
+        // height: '360',
+        // width: '480',
+          // changed resolution to 480 by 720 for larger video player to compensate for there only being 1 trailer
+        height: '480',
+        width: '720',
         videoId: result.id.videoId,
         events: {
             'onReady': onPlayerReady
@@ -189,11 +199,13 @@ $("#movie-form").submit(function(event) {
         $('.ui-menu').hide(); // hide autocomplete options
         scrollPoster();
         $("#poster-panel").show();
+        resetDivs(); //rehide
         movieSearch = null;
         // if were are using the autcomplete recommendation
     } else if (movieSearch != null) {
         event.preventDefault();
         clearResults();
+        resetDivs();
         var movie = window.movieSearch;
         getNewMovies(movie);
         getNytData(movie);
@@ -272,4 +284,6 @@ function scrollPoster(){
         scrollTop: ($('#poster-panel').offset().top)
     }, 500);
 }
+
+hide
 
