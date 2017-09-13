@@ -37,6 +37,7 @@ function getNewMovies(movie) {
             movieImg.attr("src", "https://image.tmdb.org/t/p/w185/" + moviePoster);
             movieImg.addClass("img-responsive")
             movieImg.addClass("poster");
+            movieImg.attr("data-name", movieId);
 
             movieInfoDiv.append(pTitle);
             movieInfoDiv.append(pReleased);
@@ -270,6 +271,7 @@ $("#movie-form").submit(function(event) {
 });
 
 $(document).on("click", ".move-button", displayGoodies);
+$(document).on("click", ".poster", displayGoodies);
 
 
 // validate
