@@ -70,10 +70,11 @@ function displayGoodies() {
     clearGoodies();
     $("#review-panel").show();
     $("#trailer-panel").show();
+    $("#recomendation-panel").show();
     var title = $(this).attr("title");
     var dataName = $(this).attr("data-name");
     getTrailerId(dataName);
-
+    getRecomendationId(dataName);
     getNytData(title);
 
     //scroll to top of trailer div
@@ -84,18 +85,61 @@ function displayGoodies() {
 }
 
 
+
 function getTrailerId(x) {
     var queryURL = "https://api.themoviedb.org/3/movie/" + x + "/videos?api_key=d53b802d30d38d0bf73c24dabc4a5c8d&language=en-US"
-    // console.log(queryURL);
+    console.log(queryURL);
     $.ajax({
         url: queryURL,
         method: "GET"
     }).done(function(response) {
-        var youtubeId = response.results[0].key;
-        var test = response.results[0].type;
-        // console.log(youtubeId);
-        console.log(test);
-        getYtData(youtubeId);
+
+        var trailerArr = [];
+        var featuretteArr = [];
+
+        for (var i = 0; i < response.results.length; i++) {
+            if (response.results[i].type === "Trailer") {
+                var youtubeId = response.results[i].key;
+                trailerArr.push(response.results[i].key);
+                // getYtData(youtubeId);
+
+            } else {
+                var youtubeId = response.results[i].key;
+                featuretteArr.push(response.results[i].key);
+                // getYtData(youtubeId);
+            }
+
+
+        }
+        // if trailer type is 'Trailer' we prefer to show that, otherwise well show 'featurette'
+          if (trailerArr.length > 0) {
+                getYtData(trailerArr[0]);
+                console.log(trailerArr + "=================");
+
+            }
+            else {
+              getYtData(featuretteArr[0]);
+              console.log(featuretteArr + "=================");
+            }
+
+    });
+}
+
+function getRecomendationId(x) {
+    var recommendationUrl = "https://api.themoviedb.org/3/movie/" + x + "/recommendations?api_key=d53b802d30d38d0bf73c24dabc4a5c8d&language=en-US&page=1";
+    $.ajax({
+        url: recommendationUrl,
+        method: 'GET',
+    }).done(function(recommendation) {
+        for (var i = 0; i < 12; i++) {
+            var userRecommendation = recommendation.results[i].title;
+
+            console.log(recommendation.results[i].title);
+            $("#recomendation").append("<tr><td>" + recommendation.results[i].title + "</td></tr>"
+
+            );
+
+        }
     });
 }
 
@@ -107,6 +151,7 @@ function getNytData(title) {
         method: 'GET',
     }).done(function(result) {
         for (var i = 0; i < result.results.length; i++) {
+            // for (var i = 0; i < 1; i++) {
             $("#reviews > tbody").append("<tr><td>" + result.results[i].link.suggested_link_text + "</td><td>" + "<a href='" + result.results[i].link.url + "'>" + result.results[i].link.url + "</a>" + "</td></tr>");
         }
     })
@@ -123,7 +168,7 @@ function getYtData(title) {
         for (var i = 0; i < results.length; i++) {
             // displayVideo(results[i], i);
             //blake mods
-             displayVideo(results[0]);
+            displayVideo(results[0]);
         }
     });
 }
@@ -147,11 +192,15 @@ function hideDivs() {
     $("#poster-panel").hide();
     $("#review-panel").hide();
     $("#trailer-panel").hide();
+    $("#recomendation-panel").hide();
 }
+
 function resetDivs() {
     // $("#poster-panel").hide();
     $("#review-panel").hide();
     $("#trailer-panel").hide();
+    $("#reviews-results").empty();
+    $("#recomendation-panel").hide();
 }
 
 
@@ -163,7 +212,7 @@ function displayVideo(result, i) {
     var player = new YT.Player(vidId, {
         // height: '360',
         // width: '480',
-          // changed resolution to 480 by 720 for larger video player to compensate for there only being 1 trailer
+        // changed resolution to 480 by 720 for larger video player to compensate for there only being 1 trailer
         height: '480',
         width: '720',
         videoId: result.id.videoId,
@@ -246,7 +295,7 @@ $(function() {
 
     }
     var selectItem = function(event, ui) {
-        event.preventDefault() 
+        event.preventDefault()
         $("#movie-input").val(ui.item.value);
         // console.log(ui.item.value);
         window.movieSearch = ui.item.value;
@@ -263,7 +312,7 @@ $(function() {
 
         },
         autoFocus: true,
-        minLength: 2, 
+        minLength: 2,
         change: function() {
             $("#movie-input").val("").css("display", 2);
         }
@@ -272,18 +321,15 @@ $(function() {
 
 //momentjs to get year of relesae
 
-function getYear(date){
- var dateFormat = "YYYY-MM-DD";
- var convertedDate = moment(date, dateFormat);
- year = convertedDate.format("YYYY");
- return year;
+function getYear(date) {
+    var dateFormat = "YYYY-MM-DD";
+    var convertedDate = moment(date, dateFormat);
+    year = convertedDate.format("YYYY");
+    return year;
 }
 
-function scrollPoster(){
-       $('html, body').animate({
+function scrollPoster() {
+    $('html, body').animate({
         scrollTop: ($('#poster-panel').offset().top)
     }, 500);
 }
-
-hide
-
